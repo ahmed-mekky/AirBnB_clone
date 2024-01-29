@@ -1,11 +1,8 @@
-#!/usr/bin/python3
-"""storage model of the airbnb"""
 import json
-from pathlib import Path
 
 
-class BaseModel:
-    """convert the dictionary representation to a JSON string"""
+class FileStorage:
+    """Serializes instances to a JSON file and deserializes JSON file to instances"""
 
     __file_path = "file.json"
     __objects = {}
@@ -18,11 +15,19 @@ class BaseModel:
         self.__objects[key] = obj
 
     def save(self):
+        print(type(self.__objects.get("BaseModel.12345")))
+        serialized_objects = {key: obj.to_dict() for key, obj in self.__objects.items()}
         with open(self.__file_path, "w") as json_file:
-            json.dump(self.__objects, json_file)
+            json.dump(serialized_objects, json_file)
 
     def reload(self):
-        file_path = Path(self.__file_path)
-        if file_path.exists():
+        from models.base_model import BaseModel
+
+        file_content = {}
+        try:
             with open(self.__file_path, "r") as json_file:
-                self.__objects = json.load(json_file)
+                file_content = json.load(json_file)
+                for key, obj in file_content.items():
+                    self.all()[key] = BaseModel(**obj)
+        except FileNotFoundError:
+            pass
