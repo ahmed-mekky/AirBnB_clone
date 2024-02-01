@@ -14,7 +14,7 @@ classes = {"BaseModel": BaseModel}
 class HBNBCommand(cmd.Cmd):
     """main class"""
 
-    prompt = "(hbnb) "
+    prompt = "(hbnb)"
 
     def do_quit(self, line):
         """function to quit when typing quit"""
