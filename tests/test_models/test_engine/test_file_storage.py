@@ -5,6 +5,7 @@ import unittest
 import os
 from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
+from models import storage
 
 
 class TestFileStorage(unittest.TestCase):
@@ -53,10 +54,21 @@ class TestFileStorage(unittest.TestCase):
             self.assertIn(obj.id, f.read())
 
     def test_reload(self):
-        """Tests reload method"""
-        obj = BaseModel()
-        self.storage.new(obj)
-        self.storage.save()
-        self.storage.reload()
-        key = f"{obj.__class__.__name__}.{obj.id}"
-        self.assertIn(key, self.storage.all())
+        """Storage file is successfully loaded to __objects"""
+        new = BaseModel()
+        storage.save()
+        storage.reload()
+        for obj in storage.all().values():
+            loaded = obj
+        self.assertEqual(new.to_dict()["id"], loaded.to_dict()["id"])
+
+    def test_reload_empty(self):
+        """Load from an empty file"""
+        with open("file.json", "w") as f:
+            pass
+        with self.assertRaises(ValueError):
+            storage.reload()
+
+    def test_reload_from_nonexistent(self):
+        """Nothing happens if file does not exist"""
+        self.assertEqual(storage.reload(), None)
