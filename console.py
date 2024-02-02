@@ -77,15 +77,15 @@ class HBNBCommand(cmd.Cmd):
         """function to print instances"""
         commands = line.strip().split()
         models = []
-        notExist = False
+        notExist = True
         for key, model in storage.all().items():
             if len(commands) >= 1:
                 if re.match(rf"^{commands[0]}*", key):
                     models.append(str(model))
-                else:
-                    notExist = True
+                    notExist = False
             else:
                 models.append(str(model))
+                notExist = False
         if notExist:
             print("** class doesn't exist **")
         else:
