@@ -97,7 +97,6 @@ class HBNBCommand(cmd.Cmd):
                 if re.match(rf"^{commands[0]}*", key):
                     models.append(str(model))
             else:
-                print("bye")
                 models.append(str(model))
         if models:
             print(models)
