@@ -5,9 +5,21 @@ import re
 from models.base_model import BaseModel
 from models.user import User
 from models import storage
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
-
-classes = {"BaseModel": BaseModel, "User": User}
+classes = {
+    "BaseModel": BaseModel,
+    "User": User,
+    "State": State,
+    "City": City,
+    "Amenity": Amenity,
+    "Place": Place,
+    "Review": Review,
+}
 
 
 class HBNBCommand(cmd.Cmd):
@@ -76,19 +88,18 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, line):
         """function to print instances"""
         commands = line.strip().split()
+        if len(commands) >= 1 and commands[0] not in classes.keys():
+            print("** class doesn't exist **")
+            return
         models = []
-        notExist = True
         for key, model in storage.all().items():
             if len(commands) >= 1:
                 if re.match(rf"^{commands[0]}*", key):
                     models.append(str(model))
-                    notExist = False
             else:
+                print("bye")
                 models.append(str(model))
-                notExist = False
-        if notExist:
-            print("** class doesn't exist **")
-        else:
+        if models:
             print(models)
 
     def do_update(self, line):
