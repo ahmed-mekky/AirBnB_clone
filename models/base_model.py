@@ -1,12 +1,13 @@
 import uuid
 import datetime
-from models import storage
 
 
 class BaseModel:
     """Base class for other classes"""
 
     def __init__(self, *args, **kwargs):
+        from models import storage
+
         if kwargs:
             for key, value in kwargs.items():
                 if key != "__class__":
@@ -24,6 +25,8 @@ class BaseModel:
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
     def save(self):
+        from models import storage
+
         self.updated_at = datetime.datetime.now()
         storage.save()
 
