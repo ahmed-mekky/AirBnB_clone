@@ -1,14 +1,13 @@
 #!/usr/bin/python3
 """main module for the console"""
 import cmd
-from os import stat
 import re
-from sys import base_prefix
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 
 
-classes = {"BaseModel": BaseModel}
+classes = {"BaseModel": BaseModel, "User": User}
 
 
 class HBNBCommand(cmd.Cmd):
@@ -35,9 +34,9 @@ class HBNBCommand(cmd.Cmd):
         elif commands[0] not in classes:
             print("** class doesn't exist **")
         else:
-            MyModel = BaseModel()
+            MyModel = classes[commands[0]]()
             print(MyModel.id)
-            MyModel.save()
+            storage.save()
 
     def do_show(self, line):
         """function to list an instance by its id"""
