@@ -20,8 +20,10 @@ class FileStorage:
             json.dump(serialized_objects, json_file)
 
     def reload(self):
-        from console import classes
+        from models.base_model import BaseModel
+        from models.user import User
 
+        classes = {"BaseModel": BaseModel, "User": User}
         file_content = {}
         try:
             with open(self.__file_path, "r") as json_file:
